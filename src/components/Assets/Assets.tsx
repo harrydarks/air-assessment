@@ -5,14 +5,20 @@ import "./styles.css";
 
 interface IAssetsProps {
   assets: Asset[];
+  handleDrag: (id: number) => () => void;
+  handleDrop: (id: number) => () => void;
 }
 
-export const Assets = ({ assets }: IAssetsProps) => {
+export const Assets = ({ assets, handleDrag, handleDrop }: IAssetsProps) => {
   console.log({ assets });
   return (
     <Flex wrap="wrap" gap={16}>
       {assets.map((asset, i) => (
         <div
+          draggable={true}
+          onDragOver={(ev) => ev.preventDefault()}
+          onDragStart={handleDrag(i)}
+          onDrop={handleDrop(i)}
           key={i}
           style={{
             backgroundImage: `url(${asset.assets.image})`,

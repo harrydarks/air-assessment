@@ -11,12 +11,12 @@ import InfiniteScroll from "react-infinite-scroll-component";
 function App() {
   const [boardItems, setBoardItems] = useState<BoardItem[]>([]);
 
-  const [loading, setLoading] = useState<boolean>(false);
-
   const [assets, setAssets] = useState<Asset[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [cursor, setCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
+
+  const [dragId, setDragId] = useState<number>(0);
 
   const fetchBoardItems = async () => {
     try {
@@ -43,8 +43,6 @@ function App() {
   };
 
   const fetchAssets = async () => {
-    setLoading(true);
-
     try {
       const {
         data: {
@@ -71,7 +69,6 @@ function App() {
     } catch (e) {
       console.error(e);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -80,11 +77,28 @@ function App() {
     return () => setAssets([]);
   }, []);
 
+  const handelDropToBoard = () => {
+    setAssets(assets.filter((_, i) => i !== dragId));
+  };
+
+  const handleDrop = (id: number) => () => {
+    const dragAsset = assets[dragId];
+    assets.splice(dragId, 1);
+    const newAssets = [...assets.slice(0, id), dragAsset, ...assets.slice(id)];
+    setAssets(newAssets);
+  };
+
+  const handleDrag = (id: number) => () => {
+    setDragId(id);
+  };
+
   const collapseItems: CollapseProps["items"] = [
     {
       key: "board",
       label: `BOARDS (${boardItems.length})`,
-      children: <BoardItems boardItems={boardItems} />,
+      children: (
+        <BoardItems boardItems={boardItems} onDrop={handelDropToBoard} />
+      ),
     },
     {
       key: "assets",
@@ -97,7 +111,11 @@ function App() {
           loader={<Spin tip="Loading assets..." />}
           endMessage={<Empty description="No data to be loaded" />}
         >
-          <Assets assets={assets} />
+          <Assets
+            assets={assets}
+            handleDrag={handleDrag}
+            handleDrop={handleDrop}
+          />
         </InfiniteScroll>
       ),
     },

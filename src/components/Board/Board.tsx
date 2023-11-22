@@ -4,14 +4,17 @@ import "./styles.css";
 
 interface IBoardProps {
   boardItems: BoardItem[];
+  onDrop: () => void;
 }
 
-export const BoardItems = ({ boardItems }: IBoardProps) => {
+export const BoardItems = ({ boardItems, onDrop }: IBoardProps) => {
   return (
     <Flex gap={16} wrap="wrap">
       {boardItems.map((item, i) => (
         <div
-          key={i}
+          onDrop={onDrop}
+          onDragOver={(e) => e.preventDefault()}
+          key={item.id}
           className="board-item"
           style={{
             backgroundImage: `url(${item.thumbnails[0]})`,
