@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/air-assessment/static/css/main.282dc804.css",
+    "main.js": "/air-assessment/static/js/main.a5bf9eb6.js",
+    "index.html": "/air-assessment/index.html",
+    "main.282dc804.css.map": "/air-assessment/static/css/main.282dc804.css.map",
+    "main.a5bf9eb6.js.map": "/air-assessment/static/js/main.a5bf9eb6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.282dc804.css",
+    "static/js/main.a5bf9eb6.js"
+  ]
+}
